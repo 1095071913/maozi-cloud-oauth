@@ -1,0 +1,428 @@
+variables:
+ project: "sso" 
+ version: "v1.4.2${CI_PIPELINE_ID}-release"
+ port: "1000"
+ imageVersion: "'3.0'"
+ module: "basics"   
+ desc: "https://zhongshitech.yuque.com/srnzo1/ky2u7y/hl3w9s"
+ 
+    
+#################################   项目变量 End  ##########################################     
+   
+           
+  
+    
+ 
+     
+  
+     
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+#################################   流水线 Begin ##########################################  
+
+stages: 
+  - 构建 
+  - 合并
+  - 推送   
+  - 发布
+  - 清理 
+   
+#################################   流水线 End ############################################
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+#################################   构建 Begin ##########################################
+
+   
+构建文件:    
+  stage: 构建     
+  artifacts:
+    paths:
+    - ./zhongshi-etc-$module-$project/docker-compose.yml
+    - ./zhongshi-etc-$module-$project/Dockerfile
+  script:  
+    - cd zhongshi-etc-$module-$project
+    - echo -e 'FROM openjdk:8-jre 
+          \nMAINTAINER zhongshi <zhongshi@zhongshi.info>  
+          \nENV DOCKERIZE_VERSION v0.6.0  
+          \nENV LOG_DIR /log/'$project'
+          \nRUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo "Asia/Shanghai" >/etc/timezone
+          \nRUN mkdir /'$project'  
+          \nWORKDIR /'$project'    
+          \nCOPY zhongshi-etc-'$module'-'$project'.jar /'$project'/zhongshi-etc-'$module'-'$project'.jar    
+          \nENTRYPOINT java -server -Xms512m -Xmx1g -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=512m -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=100 -XX:GCLogFileSize=100K -Xloggc:$LOG_DIR/gc.log -DLOG_PATH=$LOG_DIR/log.log  -Djava.security.egd=file:/dev/./urandom -DNACOS_CONFIG_SERVER=$NACOS_CONFIG_SERVER -jar /'$project'/zhongshi-etc-'$module'-'$project'.jar
+          \nEXPOSE '$port'    
+       ' > Dockerfile
+    - echo -e 'version'':' $imageVersion
+       '\nservices'':'
+       '\n  zhongshi-etc-'$module'-'$project':'
+       '\n    image'':' 172.18.247.41:1443/zhongshi-etc-test-images'/zhongshi-etc-'$module'-'$project':'$version
+       '\n    restart'':' 'on-failure '
+       '\n    container_name'':' 'zhongshi-etc-'$module'-'$project
+       '\n    volumes:'
+       '\n      - /var/log/zhongshi-etc:/log'
+       '\n    environment'':'
+       '\n      MODULE'':'' zhongshi-etc-'$module'-'$project':'$version
+       '\n      NACOS_CONFIG_SERVER'':' 'nacos-standalone-mysql'
+       '\n      TZ'':'' Asia/Shanghai'
+       '\n    ports'':'
+       '\n      - '$port':'$port
+       '\n    networks'':'
+       '\n      - zhongshi-backend'
+       '\nnetworks'':'
+       '\n  zhongshi-backend'':'
+       '\n    external'':'' true
+      ' > docker-compose.yml
+    - cat Dockerfile
+    - cat docker-compose.yml
+  when: manual
+    
+#################################   构建 End   ##########################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#################################  合并  Begin ##########################################
+
+合并RELEASE:
+  stage: 合并
+  artifacts:
+    paths:
+    - ./zhongshi-etc-$module-$project/docker-compose.yml
+    - ./zhongshi-etc-$module-$project/Dockerfile
+  script:
+   
+    - cp /home/gitlab-runner/.m2/config .git/config
+    
+    - "sed -i 's@8.129.174.183:8080/zhongshi/@8.129.174.183:8080/zhongshi/zhongshi-etc-'$module'-'$project'.git@'  .git/config"
+  
+    - git checkout release
+    
+    - git pull origin release
+    
+    - git merge $CI_COMMIT_REF_NAME
+    
+    - git status
+    
+    - git push origin release
+
+    - "curl --location --request POST 'https://oapi.dingtalk.com/robot/send?access_token=57e6afb26bae54dd7f3781836293abe5882f3b166ceae7641b251c119bb6782f' --header 'Content-Type: application/json'  --data '{\"msgtype\": \"text\",\"text\": {\"content\": \"应用分支：'$CI_COMMIT_REF_NAME'\r\n代码合并者：'$GITLAB_USER_NAME'\r\n应用：zhongshi-etc-'$module'-'$project'\r\n从'$CI_COMMIT_REF_NAME'合并到release\"}}'  "
+
+  when: manual
+    
+#################################  合并 End  ##########################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#################################   推送 Begin ##########################################
+
+推送:
+  stage: 推送
+  artifacts:
+    paths:
+    - ./zhongshi-etc-$module-$project/docker-compose.yml
+    - ./zhongshi-etc-$module-$project/zhongshi-etc-$module-$project.jar
+  script:
+  
+    - $MAVEN_HOME/bin/mvn clean package -U 
+    
+    - cd zhongshi-etc-$module-$project
+    
+    - cp target/zhongshi-etc-$module-$project.jar . 
+    
+    - docker build -t 172.18.247.41:1443/zhongshi-etc-test-images/zhongshi-etc-$module-$project:$version .
+    
+    - docker push 172.18.247.41:1443/zhongshi-etc-test-images/zhongshi-etc-$module-$project:$version
+    
+  when: manual
+    
+#################################   推送 End  ##########################################
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+#################################   发布 Begin ##########################################
+
+
+
+    
+    
+    
+    
+dev-01:
+  stage: 发布
+  script:
+    - ssh root@172.18.247.40 mkdir -p /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project
+    - cd zhongshi-etc-$module-$project
+    - scp -r docker-compose.yml root@172.18.247.40:/usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/
+    - ssh root@172.18.247.40 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml down
+    - ssh root@172.18.247.40 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml up -d
+    - "curl --location --request POST 'https://oapi.dingtalk.com/robot/send?access_token=57e6afb26bae54dd7f3781836293abe5882f3b166ceae7641b251c119bb6782f' --header 'Content-Type: application/json'  --data '{\"msgtype\": \"text\",\"text\": {\"content\": \"发布环境：dev-01\r\n应用分支：'$CI_COMMIT_REF_NAME'\r\n应用发布者：'$GITLAB_USER_NAME'\r\n应用：zhongshi-etc-'$module'-'$project'\"}}'  "
+  when: manual
+  
+ 
+  
+  
+  
+dev-02:
+  stage: 发布
+  script:
+    - ssh root@172.18.247.42 mkdir -p /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project
+    - cd zhongshi-etc-$module-$project
+    - scp -r docker-compose.yml root@172.18.247.42:/usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/
+    - ssh root@172.18.247.42 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml down
+    - ssh root@172.18.247.42 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml up -d
+    - "curl --location --request POST 'https://oapi.dingtalk.com/robot/send?access_token=57e6afb26bae54dd7f3781836293abe5882f3b166ceae7641b251c119bb6782f' --header 'Content-Type: application/json'  --data '{\"msgtype\": \"text\",\"text\": {\"content\": \"发布环境：dev-02\r\n应用分支：'$CI_COMMIT_REF_NAME'\r\n应用发布者：'$GITLAB_USER_NAME'\r\n应用：zhongshi-etc-'$module'-'$project'\"}}'  "
+  when: manual
+  
+ 
+  
+  
+  
+dev-03:
+  stage: 发布
+  script:
+    - ssh root@172.18.247.43 mkdir -p /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project
+    - cd zhongshi-etc-$module-$project
+    - scp -r docker-compose.yml root@172.18.247.43:/usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/
+    - ssh root@172.18.247.43 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml down
+    - ssh root@172.18.247.43 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml up -d
+    - "curl --location --request POST 'https://oapi.dingtalk.com/robot/send?access_token=57e6afb26bae54dd7f3781836293abe5882f3b166ceae7641b251c119bb6782f' --header 'Content-Type: application/json'  --data '{\"msgtype\": \"text\",\"text\": {\"content\": \"发布环境：dev-03\r\n应用分支：'$CI_COMMIT_REF_NAME'\r\n应用发布者：'$GITLAB_USER_NAME'\r\n应用：zhongshi-etc-'$module'-'$project'\"}}'  "
+  when: manual
+  
+ 
+  
+  
+  
+dev-04:
+  stage: 发布
+  script:
+    - ssh root@172.18.247.44 mkdir -p /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project
+    - cd zhongshi-etc-$module-$project
+    - scp -r docker-compose.yml root@172.18.247.44:/usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/
+    - ssh root@172.18.247.44 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml down
+    - ssh root@172.18.247.44 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml up -d
+    - "curl --location --request POST 'https://oapi.dingtalk.com/robot/send?access_token=57e6afb26bae54dd7f3781836293abe5882f3b166ceae7641b251c119bb6782f' --header 'Content-Type: application/json'  --data '{\"msgtype\": \"text\",\"text\": {\"content\": \"发布环境：dev-04\r\n应用分支：'$CI_COMMIT_REF_NAME'\r\n应用发布者：'$GITLAB_USER_NAME'\r\n应用：zhongshi-etc-'$module'-'$project'\"}}'  "
+  when: manual
+  
+  
+  
+  
+  
+dev-05:
+  stage: 发布
+  script:
+    - ssh root@172.18.247.79 mkdir -p /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project
+    - cd zhongshi-etc-$module-$project
+    - scp -r docker-compose.yml root@172.18.247.79:/usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/
+    - ssh root@172.18.247.79 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml down
+    - ssh root@172.18.247.79 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml up -d
+    - "curl --location --request POST 'https://oapi.dingtalk.com/robot/send?access_token=57e6afb26bae54dd7f3781836293abe5882f3b166ceae7641b251c119bb6782f' --header 'Content-Type: application/json'  --data '{\"msgtype\": \"text\",\"text\": {\"content\": \"发布环境：dev-05\r\n应用分支：'$CI_COMMIT_REF_NAME'\r\n应用发布者：'$GITLAB_USER_NAME'\r\n应用：zhongshi-etc-'$module'-'$project'\"}}'  "
+  when: manual
+  
+  
+  
+  
+dev-06:
+  stage: 发布
+  script:
+    - ssh root@172.18.247.54 mkdir -p /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project
+    - cd zhongshi-etc-$module-$project
+    - scp -r docker-compose.yml root@172.18.247.54:/usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/
+    - ssh root@172.18.247.54 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml down
+    - ssh root@172.18.247.54 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml up -d
+    - "curl --location --request POST 'https://oapi.dingtalk.com/robot/send?access_token=57e6afb26bae54dd7f3781836293abe5882f3b166ceae7641b251c119bb6782f' --header 'Content-Type: application/json'  --data '{\"msgtype\": \"text\",\"text\": {\"content\": \"发布环境：dev-06\r\n应用分支：'$CI_COMMIT_REF_NAME'\r\n应用发布者：'$GITLAB_USER_NAME'\r\n应用：zhongshi-etc-'$module'-'$project'\"}}'  "
+  when: manual  
+  
+  
+  
+  
+
+dev-07:
+  stage: 发布
+  script:
+    - ssh root@172.18.247.76 mkdir -p /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project
+    - cd zhongshi-etc-$module-$project
+    - scp -r docker-compose.yml root@172.18.247.76:/usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/
+    - ssh root@172.18.247.76 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml down
+    - ssh root@172.18.247.76 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml up -d
+    - "curl --location --request POST 'https://oapi.dingtalk.com/robot/send?access_token=57e6afb26bae54dd7f3781836293abe5882f3b166ceae7641b251c119bb6782f' --header 'Content-Type: application/json'  --data '{\"msgtype\": \"text\",\"text\": {\"content\": \"发布环境：dev-07\r\n应用分支：'$CI_COMMIT_REF_NAME'\r\n应用发布者：'$GITLAB_USER_NAME'\r\n应用：zhongshi-etc-'$module'-'$project'\"}}'  "
+  when: manual
+
+
+
+
+
+dev-08:
+  stage: 发布
+  script:
+    - ssh root@172.18.247.78 mkdir -p /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project
+    - cd zhongshi-etc-$module-$project
+    - scp -r docker-compose.yml root@172.18.247.78:/usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/
+    - ssh root@172.18.247.78 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml down
+    - ssh root@172.18.247.78 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml up -d
+    - "curl --location --request POST 'https://oapi.dingtalk.com/robot/send?access_token=57e6afb26bae54dd7f3781836293abe5882f3b166ceae7641b251c119bb6782f' --header 'Content-Type: application/json'  --data '{\"msgtype\": \"text\",\"text\": {\"content\": \"发布环境：dev-08\r\n应用分支：'$CI_COMMIT_REF_NAME'\r\n应用发布者：'$GITLAB_USER_NAME'\r\n应用：zhongshi-etc-'$module'-'$project'\"}}'  "
+  when: manual
+  
+  
+
+
+
+全部测试环境:
+  stage: 发布
+  script:
+  
+    - cd zhongshi-etc-$module-$project
+    
+      #dev-01
+    - scp -r docker-compose.yml root@172.18.247.40:/usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/
+    - ssh root@172.18.247.40 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml down
+    - ssh root@172.18.247.40 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml up -d
+    
+      #dev-02
+    - scp -r docker-compose.yml root@172.18.247.42:/usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/
+    - ssh root@172.18.247.42 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml down
+    - ssh root@172.18.247.42 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml up -d
+    
+      #dev-03
+    - scp -r docker-compose.yml root@172.18.247.43:/usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/
+    - ssh root@172.18.247.43 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml down
+    - ssh root@172.18.247.43 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml up -d
+    
+      #dev-04
+    - scp -r docker-compose.yml root@172.18.247.44:/usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/
+    - ssh root@172.18.247.44 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml down
+    - ssh root@172.18.247.44 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml up -d
+    
+      #dev-05
+    - scp -r docker-compose.yml root@172.18.247.79:/usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/
+    - ssh root@172.18.247.79 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml down
+    - ssh root@172.18.247.79 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml up -d
+    
+      #dev-06
+    - scp -r docker-compose.yml root@172.18.247.54:/usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/
+    - ssh root@172.18.247.54 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml down
+    - ssh root@172.18.247.54 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml up -d
+    
+      #dev-07
+    - scp -r docker-compose.yml root@172.18.247.76:/usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/
+    - ssh root@172.18.247.76 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml down
+    - ssh root@172.18.247.76 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml up -d
+    
+      #dev-08
+    - scp -r docker-compose.yml root@172.18.247.78:/usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/
+    - ssh root@172.18.247.78 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml down
+    - ssh root@172.18.247.78 docker-compose -f /usr/local/docker/zhongshi-release/zhongshi-etc-$module-$project/docker-compose.yml up -d
+    
+    - "curl --location --request POST 'https://oapi.dingtalk.com/robot/send?access_token=57e6afb26bae54dd7f3781836293abe5882f3b166ceae7641b251c119bb6782f' --header 'Content-Type: application/json'  --data '{\"msgtype\": \"text\",\"text\": {\"content\": \"发布环境：所有测试环境\r\n应用分支：'$CI_COMMIT_REF_NAME'\r\n应用发布者：'$GITLAB_USER_NAME'\r\n应用：zhongshi-etc-'$module'-'$project'\"}}'  "
+    
+  when: manual
+
+
+
+
+
+生产:
+  stage: 发布
+  script:
+  
+    - cp /home/gitlab-runner/.m2/config .git/config
+    
+    - "sed -i 's@8.129.174.183:8080/zhongshi/@8.129.174.183:8080/zhongshi/zhongshi-etc-'$module'-'$project'.git@'  .git/config"
+    
+    - cd zhongshi-etc-$module-$project
+    
+    - echo -e 'FROM openjdk:8-jre
+      \nMAINTAINER zhongshi <zhongshi@zhongshi.info>
+      \nENV DOCKERIZE_VERSION v0.6.0
+      \nENV LOG_DIR /log/'$project'
+      \nRUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo "Asia/Shanghai" >/etc/timezone
+      \nRUN mkdir /'$project'
+      \nWORKDIR /'$project'
+      \nCOPY zhongshi-etc-'$module'-'$project'.jar /'$project'/zhongshi-etc-'$module'-'$project'.jar
+      \nENTRYPOINT java -server -Xms512m -Xmx1g -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=512m -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=100 -XX:GCLogFileSize=100K -Xloggc:$LOG_DIR/gc.log -DLOG_PATH=$LOG_DIR/log.log -Djava.security.egd=file:/dev/./urandom -Dcsp.sentinel.api.port=8719 -DNACOS_CONFIG_SERVER=$NACOS_CONFIG_SERVER -Dproject.name=zhongshi-etc-'$module'-'$project' -Dcsp.sentinel.dashboard.server=sentinel:8280 -Dskywalking.agent.service_name=zhongshi-etc-'$module'-'$project' -Dskywalking.collector.backend_service=oap.skywalking:11800 -javaagent:/usr/skywalking/agent/skywalking-agent.jar -jar /'$project'/zhongshi-etc-'$module'-'$project'.jar
+      \nEXPOSE '$port'
+      ' > Dockerfile-Prod
+    - cat Dockerfile-Prod
+
+    - docker build -f Dockerfile-Prod -t r.gdzskj.tech/etc/zhongshi-etc-$module-$project:$version .
+  
+    - docker login r.gdzskj.tech -uadmin -p2ad2d3j3Fa5
+    
+    - docker push r.gdzskj.tech/etc/zhongshi-etc-$module-$project:$version
+    
+    - curl -I -XPOST -u admin:11ba85a0315fb4398899fa8adb6c99f604 "http://jk.gdzskj.tech:82/job/zs-etc-server-k8s/buildWithParameters?project=zhongshi-etc-$module-$project&version=${version}&port=$port&registry=r.gdzskj.tech"
+   
+    - "curl --location --request POST 'https://oapi.dingtalk.com/robot/send?access_token=57e6afb26bae54dd7f3781836293abe5882f3b166ceae7641b251c119bb6782f' --header 'Content-Type: application/json'  --data '{\"msgtype\": \"text\",\"text\": {\"content\": \"通知人：@+86-18127962656 \r\n发布环境：产线\r\n应用分支：'$CI_COMMIT_REF_NAME'\r\n应用发布者：'$GITLAB_USER_NAME'\r\n应用：zhongshi-etc-'$module'-'$project'\r\nTag：http:\\/\\/8.129.174.183:8080\\/zhongshi\\/zhongshi-etc-'$module'-'$project'\\/tags\\/'$version'\r\n需求文档：'$desc'\"},\"at\": {\"atMobiles\": [\"+86-18127962656\"],\"isAtAll\": false}}'  "
+  
+  when: manual
+  only:
+  - release
+
+
+
+  
+#################################   发布 End ##########################################
