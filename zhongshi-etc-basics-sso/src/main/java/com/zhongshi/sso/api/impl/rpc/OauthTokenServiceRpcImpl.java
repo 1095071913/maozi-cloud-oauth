@@ -28,7 +28,7 @@ public class OauthTokenServiceRpcImpl extends BaseResultFactory implements Oauth
 	
 	static {
 
-		code(new CodeHashMap(applicationName, port) {
+		codes(new CodeHashMap("rpc-sso") {
 
 			{
 

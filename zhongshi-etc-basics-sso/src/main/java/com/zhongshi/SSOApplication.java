@@ -34,7 +34,7 @@ package com.zhongshi;
 public class SSOApplication extends BaseApplicationDB{
 	  
     public static void main(String[] args) { 
-        ApplicationRun(SSOApplication.class);   
+        ApplicationRun();   
     } 
     
 }
