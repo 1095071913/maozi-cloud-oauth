@@ -19,27 +19,12 @@ import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import com.zhongshi.factory.BaseResultFactory;
 import com.zhongshi.factory.result.AbstractBaseResult;
-import com.zhongshi.factory.result.code.CodeAttribute;
-import com.zhongshi.factory.result.code.CodeHashMap;
 import com.zhongshi.sso.api.OauthTokenServiceRpc;
 
 public class OauthTokenServiceRpcImpl extends BaseResultFactory implements OauthTokenServiceRpc {
 	
-	
-	static {
-
-		code(new CodeHashMap() {
-
-			{
-
-				this.put(new CodeAttribute(1001, "client无效"));
-				
-				this.put(new CodeAttribute(1002, "用户或密码错误"));
-
-			}
-
-		});
-
+	public OauthTokenServiceRpcImpl() {
+		this.serviceName = "oauthToken-rpc";
 	}
 	
 	@Resource
