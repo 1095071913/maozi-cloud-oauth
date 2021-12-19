@@ -19,12 +19,9 @@
 
 		<application-run>com.zhongshi.SSOApplication</application-run>
 
-
-
 		<!-- zhongshi-etc-cloud Begin -->
 		<zhongshi-etc-service-base-impl.version>1.5.0-SNAPSHOT</zhongshi-etc-service-base-impl.version>
 		<!-- zhongshi-etc-cloud End -->
-
 
 
 		<!-- Parent Begin --> 
@@ -35,14 +32,11 @@
 		<zhongshi-etc-service-rpc-api.version>1.5.0-SNAPSHOT</zhongshi-etc-service-rpc-api.version>
 		<zhongshi-etc-service-rest-api.version>1.5.0-SNAPSHOT</zhongshi-etc-service-rest-api.version>
 		<!-- Parent End -->
-
-
+		
 
 		<!-- SSO Begin -->
 		<zhongshi-etc-service-rest-api-sso.version>4.0.0-ZHONGSHI-SNAPSHOT</zhongshi-etc-service-rest-api-sso.version>
 		<!-- SSO End -->
-
-
  
 		<!-- User Begin -->
 		<zhongshi-etc-service-rpc-api-user.version>4.0.0-ZHONGSHI-SNAPSHOT</zhongshi-etc-service-rpc-api-user.version>
@@ -51,112 +45,6 @@
 
 
 	</properties>
-
-
-
-
-
-
-	<dependencyManagement>
-		<dependencies>
-
-
-
-
-
-			<!-- Parent Begin -->
-			<dependency>
-				<groupId>com.zhongshi</groupId>
-				<artifactId>zhongshi-etc-vo</artifactId>
-				<type>pom</type>
-				<version>${zhongshi-etc-vo.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.zhongshi</groupId>
-				<artifactId>zhongshi-etc-do</artifactId>
-				<type>pom</type>
-				<version>${zhongshi-etc-do.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.zhongshi</groupId>
-				<artifactId>zhongshi-etc-dto</artifactId>
-				<type>pom</type>
-				<version>${zhongshi-etc-dto.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.zhongshi</groupId>
-				<artifactId>zhongshi-etc-service-impl</artifactId>
-				<type>pom</type>
-				<version>${zhongshi-etc-service-impl.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.zhongshi</groupId>
-				<artifactId>zhongshi-etc-service-rest-api</artifactId>
-				<type>pom</type>
-				<version>${zhongshi-etc-service-rest-api.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.zhongshi</groupId>
-				<artifactId>zhongshi-etc-service-rpc-api</artifactId>
-				<type>pom</type>
-				<version>${zhongshi-etc-service-rpc-api.version}</version>
-			</dependency>
-			<!-- Parent End -->
-
-
-
-
-
-
-			<!-- SSO Begin -->
-			<dependency>    
-				<groupId>com.zhongshi</groupId>
-				<artifactId>zhongshi-etc-service-rpc-api-sso</artifactId>
-				<version>${zhongshi-etc-service-rpc-api-sso.version}</version>
-			</dependency>
-			
-			<dependency>    
-				<groupId>com.zhongshi</groupId>
-				<artifactId>zhongshi-etc-service-rest-api-sso</artifactId>
-				<version>${zhongshi-etc-service-rest-api-sso.version}</version>
-			</dependency>
-			<!-- SSO End -->
-
-
-
-
-
-			<!-- User Begin -->
-			<dependency>
-				<groupId>com.zhongshi</groupId>
-				<artifactId>zhongshi-etc-service-rpc-api-user</artifactId>
-				<version>${zhongshi-etc-service-rpc-api-user.version}</version>
-			</dependency>
-			<!-- User End -->
-
-
-
-
-
-			<!-- zhongshi-etc-cloud Begin -->
-			<dependency>
-				<groupId>com.zhongshi</groupId>
-				<artifactId>zhongshi-etc-service-base-impl</artifactId>
-				<version>${zhongshi-etc-service-base-impl.version}</version>
-			</dependency>
-			<!-- zhongshi-etc-cloud End -->
-
-
-
-
-
-		</dependencies>
-	</dependencyManagement>
 
 
 
@@ -206,12 +94,9 @@
 
 
 	<modules>
-		<module>zhongshi-etc-service-rest-api-sso</module>
 		<module>zhongshi-etc-basics-sso</module>
+		<module>zhongshi-etc-service-rest-api-sso</module>
 	</modules>
-
-
-
 
 
 

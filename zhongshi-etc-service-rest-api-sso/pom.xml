@@ -13,6 +13,7 @@
 		<dependency>
 			<groupId>com.zhongshi</groupId>
 			<artifactId>zhongshi-etc-service-rest-api</artifactId>
+			<version>${zhongshi-etc-service-rest-api.version}</version>
 			<type>pom</type>
 		</dependency>  
 	</dependencies>

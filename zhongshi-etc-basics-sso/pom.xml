@@ -24,6 +24,7 @@
 		<dependency>
 			<groupId>com.zhongshi</groupId>
 			<artifactId>zhongshi-etc-service-impl</artifactId>
+			<version>${zhongshi-etc-service-impl.version}</version>
 			<type>pom</type>
 			<exclusions>
 				<exclusion>
@@ -36,6 +37,7 @@
 		<dependency> 
 			<groupId>com.zhongshi</groupId>
 			<artifactId>zhongshi-etc-service-base-impl</artifactId>
+			<version>${zhongshi-etc-service-base-impl.version}</version>
 		</dependency>
 		<!-- Parent End -->
 
@@ -48,11 +50,13 @@
 		<dependency>
 			<groupId>com.zhongshi</groupId>
 			<artifactId>zhongshi-etc-service-rest-api-sso</artifactId>
+			<version>${zhongshi-etc-service-rest-api-sso.version}</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>com.zhongshi</groupId>
 			<artifactId>zhongshi-etc-service-rpc-api-sso</artifactId>
+			<version>${zhongshi-etc-service-rpc-api-sso.version}</version>
 		</dependency>
 		<!-- SSO End -->
 
@@ -65,6 +69,7 @@
 		<dependency>
 			<groupId>com.zhongshi</groupId>
 			<artifactId>zhongshi-etc-service-rpc-api-user</artifactId>
+			<version>${zhongshi-etc-service-rpc-api-user.version}</version>
 		</dependency>
 		<!-- User End -->
 
