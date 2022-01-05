@@ -84,9 +84,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		
 		http.exceptionHandling().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		
-		.and().authorizeRequests().anyRequest().authenticated()
-		
-		.and().requestMatchers().antMatchers("/oauth/authorize");
+		.and().authorizeRequests().anyRequest().authenticated();
 		
 	}
 	

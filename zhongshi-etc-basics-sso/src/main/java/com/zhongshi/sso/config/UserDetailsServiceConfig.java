@@ -87,9 +87,6 @@ public class UserDetailsServiceConfig extends BaseResultFactory implements UserD
 			
 			grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_SYSTEM"));
 			
-			grantedAuthorities.add(new SimpleGrantedAuthority("User"));
-			 
-			
 			HttpServletRequest request = getRequest();
 			
 			Map<String,Object> userInfos=Maps.newHashMap();
@@ -107,7 +104,9 @@ public class UserDetailsServiceConfig extends BaseResultFactory implements UserD
 			return new OauthUserDetails((String)userData.get("username"), (String)userData.get("password"), grantedAuthorities,userInfos);
 			
 		} 
+		
 		return null;
+		
 	}
 
 
