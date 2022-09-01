@@ -3,12 +3,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.zhongshi</groupId>
-		<artifactId>zhongshi-etc-parent</artifactId>
+		<groupId>com.jiumao</groupId>
+		<artifactId>jiumao-saas-parent</artifactId>
 		<version>1.5.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>zhongshi-etc-sso</artifactId>
-	<version>4.0.0-ZHONGSHI-SNAPSHOT</version> 
+	<artifactId>jiumao-saas-sso</artifactId>
+	<version>1.0.0-SNAPSHOT</version> 
 	<packaging>pom</packaging>
 
   
@@ -17,29 +17,26 @@
 	<properties>
 
 
-		<application-run>com.zhongshi.SSOApplication</application-run>
+		<application-run>com.jiumao.SSOApplication</application-run>
 
-		<!-- zhongshi-etc-cloud Begin -->
-		<zhongshi-etc-service-base-impl.version>1.5.0-SNAPSHOT</zhongshi-etc-service-base-impl.version>
-		<!-- zhongshi-etc-cloud End -->
+		<!-- jiumao-saas-cloud Begin -->
+		<jiumao-saas-service-base-impl.version>1.5.0-SNAPSHOT</jiumao-saas-service-base-impl.version>
+		<!-- jiumao-saas-cloud End -->
 
 
 		<!-- Parent Begin --> 
-		<zhongshi-etc-vo.version>1.5.0-SNAPSHOT</zhongshi-etc-vo.version>
-		<zhongshi-etc-do.version>1.5.0-SNAPSHOT</zhongshi-etc-do.version>
-		<zhongshi-etc-dto.version>1.5.0-SNAPSHOT</zhongshi-etc-dto.version>
-		<zhongshi-etc-service-impl.version>1.5.0-SNAPSHOT</zhongshi-etc-service-impl.version>
-		<zhongshi-etc-service-rpc-api.version>1.5.0-SNAPSHOT</zhongshi-etc-service-rpc-api.version>
-		<zhongshi-etc-service-rest-api.version>1.5.0-SNAPSHOT</zhongshi-etc-service-rest-api.version>
+		<jiumao-saas-sso-do.version>1.0.0-SNAPSHOT</jiumao-saas-sso-do.version>
+		<jiumao-saas-sso-dto.version>1.0.0-SNAPSHOT</jiumao-saas-sso-dto.version>
+		<jiumao-saas-sso-enum.version>1.0.0-SNAPSHOT</jiumao-saas-sso-enum.version>
+		<jiumao-saas-service-rest-api-sso.version>1.0.0-SNAPSHOT</jiumao-saas-service-rest-api-sso.version>
 		<!-- Parent End -->
 		
-
-		<!-- SSO Begin -->
-		<zhongshi-etc-service-rest-api-sso.version>4.0.0-ZHONGSHI-SNAPSHOT</zhongshi-etc-service-rest-api-sso.version>
-		<!-- SSO End -->
  
 		<!-- User Begin -->
-		<zhongshi-etc-service-rpc-api-user.version>4.0.0-ZHONGSHI-SNAPSHOT</zhongshi-etc-service-rpc-api-user.version>
+		<jiumao-saas-user-dto.version>1.0.0-SNAPSHOT</jiumao-saas-user-dto.version>
+		<jiumao-saas-sso-user.version>1.0.0-SNAPSHOT</jiumao-saas-sso-user.version>
+		<jiumao-saas-user-enum.version>1.0.0-SNAPSHOT</jiumao-saas-user-enum.version>
+		<jiumao-saas-service-rpc-api-user.version>1.0.0-SNAPSHOT</jiumao-saas-service-rpc-api-user.version>
 		<!-- User End -->
    
 
@@ -49,23 +46,23 @@
 
 
 
-	<!-- <distributionManagement>
+	<distributionManagement>
 		<repository>
 			<id>maven-releases</id>
 			<name>Nexus Release Repository</name>
-			<url>http://ip/repository/maven-releases/</url>
+			<url>http://175.178.52.106:8081/repository/maven-releases/</url>
 		</repository>
 		<snapshotRepository>
 			<id>maven-snapshots</id>
 			<name>Nexus Snapshot Repository</name>
-			<url>http://ip/repository/maven-snapshots/</url>
+			<url>http://175.178.52.106:8081/repository/maven-snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<repositories>
 		<repository>
 			<id>maven-public</id>
 			<name>Nexus Repository</name>
-			<url>http://ip/repository/maven-public/</url>
+			<url>http://175.178.52.106:8081/repository/maven-public/</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
@@ -78,7 +75,7 @@
 		<pluginRepository>
 			<id>maven-public</id>
 			<name>Nexus Plugin Repository</name>
-			<url>http://ip/repository/maven-public/</url>
+			<url>http://175.178.52.106:8081/repository/maven-public/</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
@@ -86,7 +83,7 @@
 				<enabled>true</enabled>
 			</releases>
 		</pluginRepository>
-	</pluginRepositories> -->
+	</pluginRepositories>
 	
 
 
@@ -94,8 +91,9 @@
 
 
 	<modules>
-		<module>zhongshi-etc-basics-sso</module>
-		<module>zhongshi-etc-service-rest-api-sso</module>
+		<module>jiumao-saas-basics-sso</module>
+		<module>jiumao-saas-service-rest-api-sso</module>
+		<module>jiumao-saas-sso-user</module>
 	</modules>
 
 
