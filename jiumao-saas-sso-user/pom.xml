@@ -1,0 +1,34 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.jiumao</groupId>
+    <artifactId>jiumao-saas-sso</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>jiumao-saas-sso-user</artifactId>
+  
+  	<dependencies> 
+	
+		<!-- User Begin -->
+		<dependency>  
+			<groupId>com.jiumao</groupId>  
+			<artifactId>jiumao-saas-dto</artifactId>
+			<version>${jiumao-saas-dto.version}</version>
+			<type>pom</type>
+		</dependency>
+		
+		<dependency>  
+			<groupId>com.jiumao</groupId>
+			<artifactId>jiumao-saas-user-enum</artifactId>
+			<version>${jiumao-saas-user-enum.version}</version>
+		</dependency>
+		
+		<dependency>
+      		<groupId>org.springframework.security</groupId>
+      		<artifactId>spring-security-core</artifactId>
+    	</dependency>
+		<!-- User End -->
+		
+	</dependencies>
+  
+</project>
