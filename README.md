@@ -257,6 +257,38 @@ application-project-whitelist: /oauth/check_token,/oauth/token/get,/oauth/token/
 
 <br/>
 
+Nacos找到** boot-redis.yml** 配置
+
+```yaml
+spring: 
+  redis: 
+    enabled: true
+    host: localhost
+    port: 6379
+    password: 812840531zhang
+    lettuce:
+      shutdown-timeout: 300ms
+      pool:
+        max-active: 600
+        max-wait: 1000
+        max-idle: 300
+        min-idle: 0
+    timeout: 60000
+#    cluster:
+#      nodes: 
+#        - 192.168.1.111:7001
+#        - 192.168.1.112:7001
+#        - 192.168.1.110:7002
+#        - 192.168.1.110:7001
+#        - 192.168.1.111:7002
+#        - 192.168.1.112:7001
+
+```
+
+**该项目依赖Redis ，将Redis参数修改即可**
+
+<br/>
+
 <br/>
 
 # 启动服务
