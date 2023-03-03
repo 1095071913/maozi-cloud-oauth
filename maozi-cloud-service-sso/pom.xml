@@ -1,0 +1,90 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.maozi</groupId>
+		<artifactId>maozi-cloud-sso</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>maozi-cloud-service-sso</artifactId>
+
+
+
+
+
+
+
+
+	<dependencies>
+		
+		
+		<dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+
+
+		<!-- SSO Begin -->
+		<dependency>
+			<groupId>com.maozi</groupId>
+			<artifactId>maozi-cloud-service-rest-api-sso-token</artifactId>
+			<version>${maozi-cloud-service-rest-api-sso-token.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.maozi</groupId> 
+			<artifactId>maozi-cloud-sso-user</artifactId>
+			<version>${maozi-cloud-sso-user.version}</version>
+		</dependency>
+		<!-- SSO End -->
+
+
+		<!-- User Begin -->
+		<dependency>
+			<groupId>com.maozi</groupId>
+			<artifactId>maozi-cloud-service-rpc-api-user</artifactId>
+			<version>${maozi-cloud-service-rpc-api-user.version}</version>
+		</dependency>
+		<!-- User End -->
+		
+
+		<dependency>
+			<groupId>com.maozi</groupId>
+			<artifactId>maozi-cloud-service-db-impl</artifactId>
+			<version>${maozi-cloud-service-db-impl.version}</version>
+		</dependency>
+
+
+	</dependencies>
+
+
+
+
+	<!-- boot打包 Begin -->
+	<build>
+		<finalName>${parent.artifactId}</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>2.1.5.RELEASE</version>
+				<configuration>
+					<mainClass>${application-run}</mainClass>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution> 
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<!-- boot打包 End -->
+
+
+
+
+</project>
