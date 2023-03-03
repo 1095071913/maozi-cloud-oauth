@@ -257,7 +257,7 @@ application-project-whitelist: /oauth/check_token,/oauth/token/get,/oauth/token/
 
 <br/>
 
-Nacos找到** boot-redis.yml** 配置
+Nacos找到**boot-redis.yml** 配置
 
 ```yaml
 spring: 
