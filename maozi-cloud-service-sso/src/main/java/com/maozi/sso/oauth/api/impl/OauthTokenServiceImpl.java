@@ -17,30 +17,33 @@
 
 package com.maozi.sso.oauth.api.impl;
 
-import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.dubbo.rpc.RpcContext;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.common.DefaultExpiringOAuth2RefreshToken;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerSecurityConfiguration;
-import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.endpoint.CheckTokenEndpoint;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
-import com.maozi.factory.BaseResultFactory;
-import com.maozi.factory.result.error.exception.BusinessResultException;
+import com.maozi.common.BaseCommon;
+import com.maozi.common.result.error.exception.BusinessResultException;
+import com.maozi.sso.client.enums.AuthType;
 import com.maozi.sso.oauth.api.OauthTokenService;
+import com.maozi.sso.oauth.dto.platform.dto.OauthToken;
+import com.maozi.sso.oauth.dto.platform.param.ClientParam;
+import com.maozi.sso.oauth.dto.platform.param.TokenInfoParam;
 
 /**
  * 
@@ -56,11 +59,7 @@ import com.maozi.sso.oauth.api.OauthTokenService;
  * 
  */
 
-public class OauthTokenServiceImpl extends BaseResultFactory implements OauthTokenService {
-	
-	public OauthTokenServiceImpl() {
-		setServiceName("oauthToken-rpc");
-	}
+public class OauthTokenServiceImpl extends BaseCommon implements OauthTokenService {
 
 	@Resource
 	public TokenStore tokenStore;
@@ -76,55 +75,57 @@ public class OauthTokenServiceImpl extends BaseResultFactory implements OauthTok
 	
 	@Resource
 	public ConsumerTokenServices consumerTokenServices;
-
+	
 	@Resource
 	private AuthorizationServerSecurityConfiguration authorizationServerSecurityConfiguration;
 	
+	@Override
+	public String getServiceName() { return "oauthToken-rpc"; }
 	
-	public DefaultOAuth2AccessToken superGetToken(Map<String, String> parameters,Map<String,Object> userInfos) {
+	@Override
+	public String getAbbreviationModelName() { return "【授权】"; }
+	
+	public OauthToken get(String clientId,String clientSecret,AuthType type,String username,String password,String refreshTokenParam) throws Exception {
 		
-		UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(parameters.get("client_id"), parameters.get("client_secret"));
-		
-		Authentication authenticate = null;
-		
-		try {authenticate = authorizationServerSecurityConfiguration.authenticationManagerBean().authenticate(authRequest);}catch (Exception e) {
-			throw new BusinessResultException(error(code(1001)));
-		}
-		
-		RpcContext.getContext().set("userInfos", userInfos);
-		
-		ResponseEntity<OAuth2AccessToken> accessTokenResult = null;
-		
-		try {accessTokenResult = tokenEndpoint.getAccessToken(authenticate, parameters);} catch (Exception e) {
-			throw new BusinessResultException(error(code(1002)));
-		}
-		
-		DefaultOAuth2AccessToken oAuth2AccessToken = (DefaultOAuth2AccessToken) accessTokenResult.getBody();
-		
-		OAuth2Authentication readAuthentication = tokenStore.readAuthentication(oAuth2AccessToken.getValue());
-
-		ClientDetails client = clientDetailsService.loadClientByClientId(readAuthentication.getOAuth2Request().getClientId());
-		
-		Long tokenTime = (oAuth2AccessToken.getExpiration().getTime()-System.currentTimeMillis())/1000;
-		
-		if(tokenTime<=client.getAccessTokenValiditySeconds()*1000L-2){
+		try {
 			
-			oAuth2AccessToken.setExpiration(new Date(System.currentTimeMillis() + (client.getAccessTokenValiditySeconds()*1000L)));
-			tokenStore.storeAccessToken(oAuth2AccessToken,readAuthentication);
+			UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(clientId, clientSecret);
 			
-			DefaultExpiringOAuth2RefreshToken oAuth2RefreshToken = (DefaultExpiringOAuth2RefreshToken)oAuth2AccessToken.getRefreshToken();
+			Authentication authenticate = authorizationServerSecurityConfiguration.authenticationManagerBean().authenticate(authRequest);
 			
-			if(isNotNull(oAuth2RefreshToken)) {
-				oAuth2AccessToken.setRefreshToken(new DefaultExpiringOAuth2RefreshToken(oAuth2RefreshToken.getValue(),new Date(System.currentTimeMillis() + (client.getRefreshTokenValiditySeconds()*1000L))));
-				tokenStore.storeRefreshToken(oAuth2RefreshToken, readAuthentication);
-			}
+			Map<String, String> map = new HashMap<>() {{
+				put("client_id", clientId);
+				put("client_secret", clientSecret);
+				put("grant_type", type.getDesc());
+				put("username", username);
+				put("password", password);
+				put("refresh_token", refreshTokenParam);
+			}};
 			
-		}
+			ResponseEntity<OAuth2AccessToken> accessTokenResult = tokenEndpoint.getAccessToken(authenticate, map);
+			
+			DefaultOAuth2AccessToken accessToken = (DefaultOAuth2AccessToken) accessTokenResult.getBody();
+			
+			DefaultExpiringOAuth2RefreshToken refreshToken = (DefaultExpiringOAuth2RefreshToken) accessToken.getRefreshToken();
+			
+			return new OauthToken(accessToken.getValue(),refreshToken.getValue(),(accessToken.getExpiration().getTime() - System.currentTimeMillis()) / 1000L,(refreshToken.getExpiration().getTime() - System.currentTimeMillis()) / 1000L);
+			
+		} catch (InvalidGrantException e) {throw new BusinessResultException(getAbbreviationModelName()+"密码错误");
 		
-		return oAuth2AccessToken;
+		} catch (InternalAuthenticationServiceException e) {throw new BusinessResultException(e.getLocalizedMessage());}
+		
+		
 	}
 	
-	public Map superCheckToken(String token) {
+	public OauthToken get(TokenInfoParam param) throws Exception {
+		return get(param.getClientId(),param.getClientSecret(),AuthType.password,param.getUsername(),param.getPassword(),null);
+	}
+	
+	public OauthToken refresh(String refreshToken,ClientParam param) throws Exception {
+		return get(param.getClientId(),param.getClientSecret(),AuthType.refreshToken,null,null,refreshToken);
+	}
+	
+	public Map check(String token) {
 		
 		Map checkTokenData = null;
 		
@@ -136,7 +137,7 @@ public class OauthTokenServiceImpl extends BaseResultFactory implements OauthTok
 		
 	}
 	
-	public void superDestroyToken(String token) {
+	public void destroy(String token) {
 		consumerTokenServices.revokeToken(token);
 	}
 

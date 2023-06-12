@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.maozi</groupId>
+    <artifactId>maozi-cloud-sso</artifactId>
+    <version>${revision}</version>
+  </parent>
+  <artifactId>maozi-cloud-service-rest-api-sso</artifactId>
+  
+  
+  
+  	<dependencies>
+
+
+		<!-- System Begin -->
+		<dependency>
+			<groupId>com.maozi</groupId>
+			<artifactId>maozi-cloud-sso-vo</artifactId>
+			<version>${maozi-cloud-sso-vo.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.maozi</groupId>
+			<artifactId>maozi-cloud-sso-dto</artifactId>
+			<version>${maozi-cloud-sso-dto.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.maozi</groupId>
+			<artifactId>maozi-cloud-service-rest-api</artifactId>
+			<version>${maozi-cloud-service-rest-api.version}</version>
+			<type>pom</type>
+		</dependency>
+		<!-- System End -->
+
+
+	</dependencies>
+	
+	
+  
+</project>

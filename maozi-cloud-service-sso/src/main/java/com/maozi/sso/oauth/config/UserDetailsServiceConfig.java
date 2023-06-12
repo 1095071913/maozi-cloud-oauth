@@ -18,27 +18,20 @@
 package com.maozi.sso.oauth.config;
 
 import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.dubbo.config.annotation.DubboReference;
-import org.apache.dubbo.rpc.RpcContext;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.maozi.factory.BaseResultFactory;
-import com.maozi.factory.result.error.exception.BusinessResultException;
-import com.maozi.sso.OauthUserDetails;
-import com.maozi.sso.info.SystemUser;
-import com.maozi.tool.MapperUtils;
-import com.maozi.user.user.api.rpc.v1.UserServiceRpcV1;
+import com.maozi.common.BaseCommon;
+import com.maozi.system.user.api.rpc.v1.RpcUserInfoServiceV1;
+import com.maozi.system.user.api.rpc.v1.RpcUserServiceV1;
 
 /**
  * 
@@ -55,53 +48,26 @@ import com.maozi.user.user.api.rpc.v1.UserServiceRpcV1;
  */
 
 @Service
-public class UserDetailsServiceConfig extends BaseResultFactory implements UserDetailsService {
+public class UserDetailsServiceConfig extends BaseCommon implements UserDetailsService {
+	
+	@DubboReference
+	private RpcUserServiceV1 rpcUserService;
 
 	@DubboReference
-	private UserServiceRpcV1 userServiceRpcV1;
+	private RpcUserInfoServiceV1 rpcUserInfoService;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-		RpcContext rpcClient = RpcContext.getContext();
-
-		SystemUser user = null;
 		
-		try {user = userServiceRpcV1.rpcGetInfoPermissionByUsername(username).ifResultThrowErrorOrGetData();} catch (Exception e) {
-			
-			log.error(e.getLocalizedMessage());
-			
-			throw new BusinessResultException(500,"未知错误",500);
-			
-		}
+		List<String> permissions = rpcUserService.rpcGetPermissionsByUsername(username).getResultDataThrowError();
 
 		List<GrantedAuthority> grantedAuthorities = Lists.newCopyOnWriteArrayList();
- 
-		if(isNotNull(user.getPermissions())) {
-			for (String permission : user.getPermissions()) {
-				grantedAuthorities.add(new SimpleGrantedAuthority(permission));
-			}
-		}
 		
-		user.setPermissions(null);
+		permissions.stream().forEach((permission)->{
+			grantedAuthorities.add(new SimpleGrantedAuthority(permission));
+		});
 
-		HttpServletRequest request = getRequest();
-
-		Map<String, Object> userInfos = Maps.newHashMap();
-
-		String userInfoJson = isNull(request) ? rpcClient.getAttachment("userInfos") : (String) request.getParameter("userInfos");
-
-		if (!isNull(userInfoJson)) {
-			try {
-				userInfos = MapperUtils.json2mapDeeply(userInfoJson);
-			} catch (Exception e) {
-				BaseResultFactory.getStackTrace(e);
-			}
-		}
-
-		userInfos.put(SystemUser.class.getName(), MapperUtils.pojo2Map(user));
-
-		return new OauthUserDetails(user.getUsername(),userServiceRpcV1.rpcGetPasswordById(user.getId()).ifResultThrowErrorOrGetData(), grantedAuthorities, userInfos);
+		return new User(username,rpcUserService.rpcGetPasswordByUsername(username).getResultDataThrowError(), grantedAuthorities);
 
 	}
 

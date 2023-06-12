@@ -15,7 +15,10 @@
  * 
  */
 
-package com.maozi.sso.oauth.api;
+package com.maozi.sso.client.mapper;
+
+import com.maozi.base.api.IBaseMapper;
+import com.maozi.sso.client.domain.ClientDo;
 
 /**	
  * 
@@ -31,4 +34,4 @@ package com.maozi.sso.oauth.api;
  * 
  */
 
-public interface OauthTokenService {}
+public interface ClientMapper extends IBaseMapper<ClientDo>{} 

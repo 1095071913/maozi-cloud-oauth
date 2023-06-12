@@ -22,8 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.http.HttpMethod;
@@ -39,15 +40,15 @@ import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.OAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.TokenGranter;
 import org.springframework.security.oauth2.provider.client.ClientCredentialsTokenGranter;
-import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeTokenGranter;
 import org.springframework.security.oauth2.provider.implicit.ImplicitTokenGranter;
 import org.springframework.security.oauth2.provider.password.ResourceOwnerPasswordTokenGranter;
 import org.springframework.security.oauth2.provider.refresh.RefreshTokenGranter;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
-import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+
+import com.maozi.sso.client.api.ClientService;
 
 /**
  * 
@@ -69,9 +70,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 	
 	@Resource
 	private TokenStore tokenStore;
-	
-	@Resource
-	private DataSource selectDataSource;
 
 	@Resource 
 	private UserDetailsService userDetailsService;
@@ -83,12 +81,16 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 	private RedisConnectionFactory redisConnectionFactory;
 	
 	@Resource
-	private org.springframework.security.oauth2.provider.token.UserAuthenticationConverter userAuthenticationConverter;
+	@Qualifier("clientServiceImpl")
+	private ClientService clientService;
+	
+//	@Resource
+//	private org.springframework.security.oauth2.provider.token.UserAuthenticationConverter userAuthenticationConverter;
 	
 	
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.withClientDetails(new JdbcClientDetailsService(selectDataSource));
+		clients.withClientDetails(clientService);
 	}
 	
 
@@ -101,23 +103,23 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 		
-		DefaultAccessTokenConverter defaultAccessTokenConverter=new DefaultAccessTokenConverter();
-        defaultAccessTokenConverter.setUserTokenConverter(userAuthenticationConverter);  
+//		DefaultAccessTokenConverter defaultAccessTokenConverter=new DefaultAccessTokenConverter();
+//        defaultAccessTokenConverter.setUserTokenConverter(userAuthenticationConverter);  
         
 		endpoints
 				.tokenGranter(new CompositeTokenGranter(getDefaultTokenGranters(endpoints.getTokenServices(),endpoints.getClientDetailsService(),endpoints.getOAuth2RequestFactory(),endpoints.getAuthorizationCodeServices())))
 				.authenticationManager(authenticationManager)
 				.tokenStore(tokenStore)
 				.userDetailsService(userDetailsService)
-				.allowedTokenEndpointRequestMethods(HttpMethod.POST, HttpMethod.GET)
-				.accessTokenConverter(defaultAccessTokenConverter);
+				.allowedTokenEndpointRequestMethods(HttpMethod.POST, HttpMethod.GET);
+//				.accessTokenConverter(defaultAccessTokenConverter);
 	}
 	
 	private List<TokenGranter> getDefaultTokenGranters(AuthorizationServerTokenServices tokenServices, ClientDetailsService clientDetailsService, OAuth2RequestFactory requestFactory,AuthorizationCodeServices authorizationCodeServices) {
 
 		List<TokenGranter> tokenGranters = new ArrayList<TokenGranter>();
 		
-		tokenGranters.add(new ResourceOwnerSmsTokenGranter(tokenServices, clientDetailsService, requestFactory,userDetailsService));
+		tokenGranters.add(new ResourceOwnerSmsTokenGranter(tokenServices,clientDetailsService,requestFactory,userDetailsService));
 		
 		tokenGranters.add(new AuthorizationCodeTokenGranter(tokenServices, authorizationCodeServices, clientDetailsService,requestFactory));
 		

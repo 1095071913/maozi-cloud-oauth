@@ -5,60 +5,60 @@
 	<parent>
 		<groupId>com.maozi</groupId>
 		<artifactId>maozi-cloud-sso</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>${revision}</version>
 	</parent>
 	<artifactId>maozi-cloud-service-sso</artifactId>
 
 
-
-
-
-
-
-
 	<dependencies>
 		
-		
-		<dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>
-        </dependency>
-
-
-		<!-- SSO Begin -->
-		<dependency>
-			<groupId>com.maozi</groupId>
-			<artifactId>maozi-cloud-service-rest-api-sso-token</artifactId>
-			<version>${maozi-cloud-service-rest-api-sso-token.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.maozi</groupId> 
-			<artifactId>maozi-cloud-sso-user</artifactId>
-			<version>${maozi-cloud-sso-user.version}</version>
-		</dependency>
-		<!-- SSO End -->
-
-
-		<!-- User Begin -->
-		<dependency>
-			<groupId>com.maozi</groupId>
-			<artifactId>maozi-cloud-service-rpc-api-user</artifactId>
-			<version>${maozi-cloud-service-rpc-api-user.version}</version>
-		</dependency>
-		<!-- User End -->
-		
-
 		<dependency>
 			<groupId>com.maozi</groupId>
 			<artifactId>maozi-cloud-service-db-impl</artifactId>
 			<version>${maozi-cloud-service-db-impl.version}</version>
 		</dependency>
 
+		<!-- SSO Begin -->
+		<dependency>
+			<groupId>com.maozi</groupId>
+			<artifactId>maozi-cloud-sso-vo</artifactId>
+			<version>${maozi-cloud-sso-vo.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.maozi</groupId>
+			<artifactId>maozi-cloud-sso-dto</artifactId>
+			<version>${maozi-cloud-sso-dto.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.maozi</groupId>
+			<artifactId>maozi-cloud-service-rest-api-sso</artifactId>
+			<version>${maozi-cloud-service-rest-api-sso.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.maozi</groupId>
+			<artifactId>maozi-cloud-service-rpc-api-sso</artifactId>
+			<version>${maozi-cloud-service-rpc-api-sso.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.maozi</groupId>
+			<artifactId>maozi-cloud-service-rest-api-sso-oauth</artifactId>
+			<version>${maozi-cloud-service-rest-api-sso-oauth.version}</version>
+		</dependency>
+		<!-- SSO End -->
+
+		<!-- User Begin -->
+		<dependency>
+			<groupId>com.maozi</groupId>
+			<artifactId>maozi-cloud-service-rpc-api-system</artifactId>
+			<version>${maozi-cloud-service-rpc-api-system.version}</version>
+		</dependency>
+		<!-- User End -->
 
 	</dependencies>
-
-
 
 
 	<!-- boot打包 Begin -->

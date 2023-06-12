@@ -5,50 +5,46 @@
 	<parent>
 		<groupId>com.maozi</groupId>
 		<artifactId>maozi-cloud-parent</artifactId>
-		<version>1.5.0-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>maozi-cloud-sso</artifactId>
-	<version>1.0.0-SNAPSHOT</version> 
+	<version>${revision}</version> 
 	<packaging>pom</packaging>
 
   
 
 
 	<properties>
-
+		
+		<revision>1.2.0-SNAPSHOT</revision>
 
 		<application-run>com.maozi.SSOApplication</application-run>
 
-		<!-- maozi-cloud-cloud Begin -->
-		<maozi-cloud-service-base-impl.version>1.5.0-SNAPSHOT</maozi-cloud-service-base-impl.version>
-		<!-- maozi-cloud-cloud End -->
-
-
 		<!-- Parent Begin --> 
-		<maozi-cloud-sso-dto.version>1.0.0-SNAPSHOT</maozi-cloud-sso-dto.version>
-		<maozi-cloud-sso-enum.version>1.0.0-SNAPSHOT</maozi-cloud-sso-enum.version>
+		<maozi-cloud-sso-vo.version>${revision}</maozi-cloud-sso-vo.version>
+		<maozi-cloud-sso-dto.version>${revision}</maozi-cloud-sso-dto.version>
+		<maozi-cloud-sso-enum.version>${revision}</maozi-cloud-sso-enum.version>
+		<maozi-cloud-service-rpc-api-sso.version>${revision}</maozi-cloud-service-rpc-api-sso.version>
+		<maozi-cloud-service-rest-api-sso.version>${revision}</maozi-cloud-service-rest-api-sso.version>
 		<!-- Parent End -->
-		
+ 
  
 		<!-- User Begin -->
-		<maozi-cloud-user-dto.version>1.0.0-SNAPSHOT</maozi-cloud-user-dto.version>
-		<maozi-cloud-sso-user.version>1.0.0-SNAPSHOT</maozi-cloud-sso-user.version>
-		<maozi-cloud-user-enum.version>1.0.0-SNAPSHOT</maozi-cloud-user-enum.version>
-		<maozi-cloud-service-rpc-api-user.version>1.0.0-SNAPSHOT</maozi-cloud-service-rpc-api-user.version>
+		<maozi-cloud-service-rpc-api-system.version>1.2.0-SNAPSHOT</maozi-cloud-service-rpc-api-system.version>
 		<!-- User End -->
    
-
-
+   
 	</properties>
 	
 
-
 	<modules>
 		<module>maozi-cloud-service-sso</module>
-		<module>maozi-cloud-sso-user</module>
+		<module>maozi-cloud-service-rest-api-sso</module>
+		<module>maozi-cloud-sso-vo</module>
+		<module>maozi-cloud-sso-dto</module>
+		<module>maozi-cloud-sso-enum</module>
+		<module>maozi-cloud-service-rpc-api-sso</module>
 	</modules>
-
-
-
+	
 
 </project>
