@@ -2,8 +2,6 @@ package com.maozi.sso.client.api.impl.rest.v1.platform;
 
 import java.util.List;
 
-import com.github.yulichang.toolkit.MPJWrappers;
-import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.maozi.base.annotation.RestService;
 import com.maozi.base.param.PageParam;
 import com.maozi.base.result.DropDownResult;
@@ -22,30 +20,7 @@ public class RestClientServiceImplV1 extends ClientServiceImpl implements RestCl
 
 	@Override
 	public AbstractBaseResult<PageResult<ListVo>> restList(PageParam<ListParam> pageParam) {
-		
-		MPJLambdaWrapper<ClientDo> wrapper = MPJWrappers.lambdaJoin();
-		
-		wrapper.select(ClientDo::getId,ClientDo::getClientId,ClientDo::getName,ClientDo::getAccessTokenValiditySeconds,ClientDo::getRefreshTokenValiditySeconds,ClientDo::getStatus);
-		
-		ListParam param = pageParam.getData();
-		if(isNotNull(param)) {
-			
-			wrapper.likeRight(isNotNull(param.getName()), ClientDo::getName,param.getName());
-			
-			param.initOrderParam();
-            
-            List<String> asc = param.getOrderAscFieldsMap().get("t");
-            
-            List<String> desc = param.getOrderDescFieldsMap().get("t");
-            
-            wrapper.orderByAscStr(asc.size() > 0 , asc );
-            
-            wrapper.orderByDescStr(desc.size() > 0 , desc );
-			
-		}
-		
-		return success(list(pageParam,wrapper,ListVo::new));
-		
+		return success(list(pageParam,ListVo::new));
 	}
 
 	@Override

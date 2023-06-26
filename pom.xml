@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.maozi</groupId>
 		<artifactId>maozi-cloud-parent</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>maozi-cloud-sso</artifactId>
 	<version>${revision}</version> 
@@ -16,7 +16,7 @@
 
 	<properties>
 		
-		<revision>1.2.0-SNAPSHOT</revision>
+		<revision>1.2.1-SNAPSHOT</revision>
 
 		<application-run>com.maozi.SSOApplication</application-run>
 
@@ -30,7 +30,7 @@
  
  
 		<!-- User Begin -->
-		<maozi-cloud-service-rpc-api-system.version>1.2.0-SNAPSHOT</maozi-cloud-service-rpc-api-system.version>
+		<maozi-cloud-service-rpc-api-system.version>1.2.1-SNAPSHOT</maozi-cloud-service-rpc-api-system.version>
 		<!-- User End -->
    
    

@@ -6,6 +6,8 @@ import java.util.Map;
 
 import com.maozi.base.AbstractBaseDtomain;
 import com.maozi.base.param.plugin.OrderParam;
+import com.maozi.base.plugin.QueryBaseType;
+import com.maozi.base.plugin.QueryPlugin;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -14,6 +16,7 @@ import lombok.Data;
 public class ListParam extends AbstractBaseDtomain implements OrderParam {
 	
 	@ApiModelProperty("名称")
+	@QueryPlugin(value = QueryBaseType.like)
 	private String name;
 	
 	private Map<String,Boolean> orderFieldMap;
