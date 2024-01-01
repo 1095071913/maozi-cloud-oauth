@@ -1,0 +1,21 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.maozi</groupId>
+    <artifactId>maozi-cloud-oauth</artifactId>
+    <version>${revision}</version>
+  </parent>
+  <artifactId>maozi-cloud-service-rpc-api-oauth</artifactId>
+  
+  <dependencies>
+	
+	<dependency>
+		<groupId>com.maozi</groupId>
+		<artifactId>maozi-cloud-service-rest-api</artifactId>
+		<version>${maozi-cloud-service-rest-api.version}</version>
+		<type>pom</type>
+	</dependency>
+	  
+  </dependencies>
+  
+</project>

@@ -14,7 +14,7 @@
 
 # ApiFox
 
-有需要的可以下载Apifox导入[项目数据](https://gitee.com/xmaozi/maozi-cloud-parent-script/blob/release/maozi-cloud-service/maozi-cloud-service-apifox/maozi-cloud-sso.apifox.json)
+有需要的可以下载Apifox导入[项目数据](https://gitee.com/xmaozi/maozi-cloud-parent-script/blob/release/maozi-cloud-service/maozi-cloud-service-apifox/maozi-cloud-oauth.apifox.json)
 
 <img src="http://zs-dev01.oss-cn-shenzhen.aliyuncs.com/202306/38d4037f-e121-43d1-8949-e1c766a9305d.png" />
 
@@ -27,12 +27,12 @@
 # 目录说明
 
 ```text
-maozi-cloud-sso-vo                   (ViewObject)
-maozi-cloud-sso-dto                  (DataTransferObject)
-maozi-cloud-sso-enum                 (枚举)
-maozi-cloud-service-sso              (服务实现)
-maozi-cloud-service-rpc-api-sso      (RPC接口)
-maozi-cloud-service-rest-api-sso     (REST接口)
+maozi-cloud-oauth-vo                   (ViewObject)
+maozi-cloud-oauth-dto                  (DataTransferObject)
+maozi-cloud-oauth-enum                 (枚举)
+maozi-cloud-service-oauth              (服务实现)
+maozi-cloud-service-rpc-api-oauth      (RPC接口)
+maozi-cloud-service-rest-api-oauth     (REST接口)
 ```
 
 <br/>
@@ -41,14 +41,14 @@ maozi-cloud-service-rest-api-sso     (REST接口)
 
 <br/>
 
-**maozi-cloud-service-sso目录**
+**maozi-cloud-service-oauth目录**
 
 ```text
 com.maozi.                                          
-  SSOApplication.java                               (启动类)
-  sso.                                              (父模块sso)
+  OauthApplication.java                               (启动类)
+  oauth.                                              (父模块oauth)
     client.                                         (子模块client)
-    oauth.                                          (子模块oauth)
+    token.                                          (子模块token)
       api.
         OauthService.java                           (子模块服务接口)
         impl.                        
@@ -77,9 +77,9 @@ com.maozi.
 
 # 数据库导入
 
-数据库名字默认为：maozi-cloud-sso-localhost-db
+数据库名字默认为：maozi-cloud-oauth-localhost-db
 
-maozi-cloud-sso为父级目录名字
+maozi-cloud-oauth为父级目录名字
 
 localhost为Nacos配置中cloud-default.yml里面的
 
@@ -132,7 +132,7 @@ maozi-cloud-system-production-db
 
 **Nacos地址默认为localhost:8081，若不是则添加环境变量NACOS_CONFIG_SERVER**
 
-或找到 maozi-cloud-service-sso/src/main/resources/bootstrap.properties 添加
+或找到 maozi-cloud-service-oauth/src/main/resources/bootstrap.properties 添加
 
 ```
 spring.cloud.nacos.config.server-addr={Nacos地址}
@@ -140,7 +140,7 @@ spring.cloud.nacos.config.server-addr={Nacos地址}
 
 <br/>
 
-Nacos找到 **maozi-cloud-sso.yml** 配置
+Nacos找到 **maozi-cloud-oauth.yml** 配置
 
 ```yaml
 # 端口
@@ -150,7 +150,7 @@ application-port: 1000
 application-datasource-jdbc-url: localhost:3306
 application-datasource-jdbc-username: root
 application-datasource-jdbc-password: password
-application-datasource-db-name: maozi-cloud-sso-localhost-db
+application-datasource-db-name: maozi-cloud-oauth-localhost-db
 
 # 白名单
 application-redis-database: 3
@@ -211,7 +211,7 @@ spring:
 <br/>
 
 ```
-[ 2023-03-03 00:11:21 ]  [ level：INFO ]  [ TID: N/A ]  [ app：maozi-cloud-user ]  [ environment：localhost ]  [ uptime：72469 ms ]  [ config：cloud-default.yml,cloud-nacos.yml,cloud-dubbo.yml,boot-admin.yml,api-whitelist.yml,cloud-security.yml,boot-redis.yml,boot-swagger.yml,boot-arthas.yml,cloud-sentinel.yml,boot-datasource.yml,boot-mybatisplus.yml ]  [ nacosAddr：127.0.0.1:8848 net ]  [ subscribe：null ]
+[ 2023-03-03 00:11:21 ]  [ level：INFO ]  [ TID: N/A ]  [ app：maozi-cloud-user ]  [ environment：localhost ]  [ uptime：72469 ms ]  [ config：cloud-default.yml,cloud-nacos.yml,cloud-dubbo.yml,boot-admin.yml,api-whitelist.yml,cloud-oauth.yml,boot-redis.yml,boot-swagger.yml,boot-arthas.yml,cloud-sentinel.yml,boot-datasource.yml,boot-mybatisplus.yml ]  [ nacosAddr：127.0.0.1:8848 net ]  [ subscribe：null ]
 ```
 
 <br/>

@@ -1,0 +1,99 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.maozi</groupId>
+		<artifactId>maozi-cloud-oauth</artifactId>
+		<version>${revision}</version>
+	</parent>
+	<artifactId>maozi-cloud-service-oauth</artifactId>
+
+	<properties>
+
+		<maven.test.skip>true</maven.test.skip>
+		<maven.install.skip>true</maven.install.skip>
+		<maven.deploy.skip>true</maven.deploy.skip>
+
+		<application-run>com.maozi.OauthApplication</application-run>
+
+	</properties>
+
+	<dependencies>
+		
+		<dependency>
+			<groupId>com.maozi</groupId>
+			<artifactId>maozi-cloud-service-db-impl</artifactId>
+			<version>${maozi-cloud-service-db-impl.version}</version>
+		</dependency>
+
+		<!-- Oauth Begin -->
+		<dependency>
+			<groupId>com.maozi</groupId>
+			<artifactId>maozi-cloud-oauth-vo</artifactId>
+			<version>${maozi-cloud-oauth-vo.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.maozi</groupId>
+			<artifactId>maozi-cloud-oauth-dto</artifactId>
+			<version>${maozi-cloud-oauth-dto.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.maozi</groupId>
+			<artifactId>maozi-cloud-service-rest-api-oauth</artifactId>
+			<version>${maozi-cloud-service-rest-api-oauth.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.maozi</groupId>
+			<artifactId>maozi-cloud-service-rpc-api-oauth</artifactId>
+			<version>${maozi-cloud-service-rpc-api-oauth.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.maozi</groupId>
+			<artifactId>maozi-cloud-service-rest-api-oauth-token</artifactId>
+			<version>${maozi-cloud-service-rest-api-oauth-token.version}</version>
+		</dependency>
+		<!-- Oauth End -->
+
+		<!-- User Begin -->
+		<dependency>
+			<groupId>com.maozi</groupId>
+			<artifactId>maozi-cloud-service-rpc-api-system</artifactId>
+			<version>${maozi-cloud-service-rpc-api-system.version}</version>
+		</dependency>
+		<!-- User End -->
+
+	</dependencies>
+
+
+	<!-- boot打包 Begin -->
+	<build>
+		<finalName>${artifactId}</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>2.1.5.RELEASE</version>
+				<configuration>
+					<mainClass>${application-run}</mainClass>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution> 
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<!-- boot打包 End -->
+
+
+
+
+</project>
