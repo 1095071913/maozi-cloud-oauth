@@ -211,7 +211,7 @@ spring:
 <br/>
 
 ```
-[ 2023-03-03 00:11:21 ]  [ level：INFO ]  [ TID: N/A ]  [ app：maozi-cloud-user ]  [ environment：localhost ]  [ uptime：72469 ms ]  [ config：cloud-default.yml,cloud-nacos.yml,cloud-dubbo.yml,boot-admin.yml,api-whitelist.yml,cloud-oauth.yml,boot-redis.yml,boot-swagger.yml,boot-arthas.yml,cloud-sentinel.yml,boot-datasource.yml,boot-mybatisplus.yml ]  [ nacosAddr：127.0.0.1:8848 net ]  [ subscribe：null ]
+[ 2023-03-03 00:11:21 ]  [ level：INFO ]  [ TID: N/A ]  [ app：maozi-cloud-user ]  [ environment：localhost ]  [ uptime：72469 ms ]  [ config：cloud-default.yml,cloud-nacos.yml,cloud-dubbo.yml,boot-admin.yml,api-whitelist.yml,cloud-oauth.yml,boot-redis.yml,boot-swagger.yml,boot-arthas.yml,cloud-sentinel.yml,boot-datasource.yml,boot-db.yml ]  [ nacosAddr：127.0.0.1:8848 net ]  [ subscribe：null ]
 ```
 
 <br/>
