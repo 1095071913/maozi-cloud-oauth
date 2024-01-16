@@ -6,6 +6,7 @@
 		<groupId>com.maozi</groupId>
 		<artifactId>maozi-cloud-parent</artifactId>
 		<version>1.0.2-SNAPSHOT</version>
+		<relativePath/>
 	</parent>
 	<artifactId>maozi-cloud-oauth</artifactId>
 	<version>${revision}</version> 
