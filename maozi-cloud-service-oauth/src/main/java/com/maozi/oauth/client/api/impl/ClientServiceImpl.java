@@ -6,7 +6,7 @@ import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.maozi.base.api.impl.BaseServiceImpl;
 import com.maozi.oauth.client.api.ClientService;
 import com.maozi.oauth.client.domain.ClientDo;
-import com.maozi.oauth.client.dto.v1.platform.SaveUpdateParam;
+import com.maozi.oauth.client.dto.v1.platform.ClientSaveUpdateParam;
 import com.maozi.oauth.client.mapper.ClientMapper;
 import java.util.Collection;
 import java.util.Map;
@@ -36,7 +36,7 @@ public class ClientServiceImpl extends BaseServiceImpl<ClientMapper,ClientDo,Voi
 		
 	}
 	
-	protected Long restSaveUpdate(Long id,SaveUpdateParam param) {
+	protected Long restSaveUpdate(Long id, ClientSaveUpdateParam param) {
 		
 		if(isNotNull(id)) {
 			param.setClientId(null);

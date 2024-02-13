@@ -31,20 +31,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-/**
- * 
- * 功能说明：UserDetails认证配置
- * 
- * 功能作者：彭晋龙 ( 联系方式QQ/微信：1095071913 )
- *
- * 创建日期：2019-10-12 ：3:09:00
- *
- * 版权归属：蓝河团队
- *
- * 协议说明：Apache2.0（ 文件顶端 ）
- * 
- */
-
 @Service
 public class UserDetailsServiceConfig extends BaseCommon implements UserDetailsService {
 	

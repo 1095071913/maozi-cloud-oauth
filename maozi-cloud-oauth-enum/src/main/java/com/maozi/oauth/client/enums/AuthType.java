@@ -1,11 +1,9 @@
 package com.maozi.oauth.client.enums;
 
 import com.maozi.base.IEnum;
-import com.maozi.base.enums.config.annotation.SwaggerDisplayEnum;
 import lombok.Getter;
 import lombok.Setter;
 
-@SwaggerDisplayEnum
 public enum AuthType implements IEnum {
 	
 	authorizationCode(0,"authorization_code","授权码模式"),password(1,"password","密码模式"),refreshToken(2,"refresh_token","刷新令牌"),implicit(3,"implicit","简单模式"),clientCredentials(4,"client_credentials","客户端模式");
@@ -31,5 +29,10 @@ public enum AuthType implements IEnum {
 	@Getter
 	@Setter
 	private String name;
+
+	@Override
+	public String toString() {
+		return value+"."+desc;
+	}
 	
 }

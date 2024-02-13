@@ -16,20 +16,6 @@
  */
 
 package com.maozi;
-
-/**	  
- *   
- * 	功能说明：认证授权启动
- * 
- *	功能作者：彭晋龙 ( 联系方式QQ/微信：1095071913 ) 
- *	
- *	创建日期：2019-10-04 ：9:37:0  
- *
- *	版权归属：蓝河团队
- *    
- *	协议说明：Apache2.0（ 文件顶端 ）
- * 
- */      
  
 public class OauthApplication extends BaseApplicationDB{
 	  

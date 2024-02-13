@@ -20,7 +20,7 @@ package com.maozi.oauth.client.dto.v1.platform;
 import com.maozi.base.AbstractBaseDtomain;
 import com.maozi.base.enums.Status;
 import com.maozi.oauth.client.enums.AuthType;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Set;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -44,33 +44,33 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SaveUpdateParam extends AbstractBaseDtomain {
+public class ClientSaveUpdateParam extends AbstractBaseDtomain {
 	
 	@NotNull(message = "客户端ID不能为空")
-	@ApiModelProperty("客户端ID")
+	@Schema(description = "客户端ID")
 	private String clientId;
 	
 	@NotNull(message = "客户端密钥不能为空")
-	@ApiModelProperty("客户端密钥")
+	@Schema(description = "客户端密钥")
 	private String clientSecret;
 	
 	@NotNull(message = "名称不能为空")
-	@ApiModelProperty("名称")
+	@Schema(description = "名称")
 	private String name;
 	
-	@ApiModelProperty("授权模式")
+	@Schema(description = "授权模式")
 	private Set<AuthType> authTypes;
 	
-	@ApiModelProperty("授权令牌有效期 秒 默认一天")
+	@Schema(description = "授权令牌有效期 秒 默认一天")
 	private Integer accessTokenValiditySeconds;
 	
-	@ApiModelProperty("刷新令牌有效期 秒 默认一天")
+	@Schema(description = "刷新令牌有效期 秒 默认一天")
 	private Integer refreshTokenValiditySeconds;
 	
-	@ApiModelProperty("备注")
+	@Schema(description = "备注")
 	private String remark;
 	
-	@ApiModelProperty("状态")
+	@Schema(description = "状态")
 	private Status status;
 	
 }
