@@ -6,11 +6,9 @@
     <version>${revision}</version>
   </parent>
   <artifactId>maozi-cloud-service-rest-api-oauth</artifactId>
-  
-  
-  
-  	<dependencies>
 
+  
+	<dependencies>
 
 		<!-- System Begin -->
 		<dependency>
@@ -35,7 +33,6 @@
 
 
 	</dependencies>
-	
 	
   
 </project>
